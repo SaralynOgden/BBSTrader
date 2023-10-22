@@ -1,9 +1,9 @@
 {
     "mt5": {
-        "login": 75319438,
-        "password": "DfN!5xYq",
+        "login": 72467727,
+        "password": "onkz0pjy",
         "server": "MetaQuotes-Demo",
-        "terminal_pathway": "C:\\Program Files\\MetaTrader5\\terminal64.exe",
+        "terminal_pathway": "C:\\Program Files\\MetaTrader 5\\terminal64.exe",
         "symbols": ["EURJPY"],
         "timeframe": 60000
     }
