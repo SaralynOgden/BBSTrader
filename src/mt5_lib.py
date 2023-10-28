@@ -29,8 +29,10 @@ def connect(json_settings: dict) -> bool:
 
     except KeyError as e:
         print(f"The queried dictionary key does not exist: {e.args}")
+        raise e
     except ConnectionError as e:
         print(f"Could not connect to MetaTrader5: {e.args}")
+        raise e
 
 
 def disconnect():
