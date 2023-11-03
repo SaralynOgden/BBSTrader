@@ -5,7 +5,7 @@ import os
 import mt5_lib as trader
 
 # Path to MetaTrader5 login details.
-ACCOUNT_SETTINGS_PATH = "settings.json"
+ACCOUNT_SETTINGS_PATH = "../settings.json"
 
 
 def get_trader_settings(file_path: str) -> dict:
@@ -31,8 +31,6 @@ def main():
     Business logic entry point.
     """
 
-    print("Main")
-
     # Prevents imported invocations of main().
     if __name__ != "__main__":
         raise RuntimeError(f"main() should only be invoked in: {__file__}")
@@ -44,8 +42,27 @@ def main():
     # ConnectionError if a connection cannot be established
     trader.connect(json_settings)
 
-    # Until further logic is implemented, the terminal will close immediately
-    # after the previous statement executes. This is the expected behavior.
+    # Get symbols array from settings.json
+    symbols_arr = json_settings["mt5"]["symbols"]
+
+    # Initialize all symbols
+    for symbol in symbols_arr:
+        try:
+            is_initialized = trader.initialize_symbol(symbol)
+        except Exception as e:
+            print(e)
+        
+
+    # Get candlesticks for every initialized symbol
+    for symbol in symbols_arr:
+        candlesticks = trader.get_candlesticks(
+            symbol=symbol,
+            timeframe=json_settings["mt5"]["timeframe"],
+            num_candlesticks=50000
+        )
+        
+        print(candlesticks)
+
 
 if __name__ == '__main__':
     main()
