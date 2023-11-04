@@ -3,6 +3,7 @@ import json
 import os
 
 import mt5_lib as trader
+import indicator_lib as ind
 
 # Path to MetaTrader5 login details.
 ACCOUNT_SETTINGS_PATH = "../settings.json"
@@ -58,11 +59,11 @@ def main():
         candlesticks = trader.get_candlesticks(
             symbol=symbol,
             timeframe=json_settings["mt5"]["timeframe"],
-            num_candlesticks=50000
+            num_candlesticks=1000
         )
         
-        print(candlesticks)
-
+        ema_250 = ind.calc_ema(candlesticks, 250)
+        print(ema_250)
 
 if __name__ == '__main__':
     main()
