@@ -4,7 +4,8 @@
         "password": "onkz0pjy",
         "server": "MetaQuotes-Demo",
         "terminal_pathway": "C:\\Program Files\\MetaTrader 5\\terminal64.exe",
-        "symbols": ["EURJPY"],
-        "timeframe": 60000
+        "symbols": ["USDSEK"],
+        "timeout":60000,
+        "timeframe": "M1"
     }
 }
