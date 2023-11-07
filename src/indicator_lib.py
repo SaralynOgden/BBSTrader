@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import numpy as np
+=======
+import numpy
+>>>>>>> bb7d06cf9f09feb1fc6d1100ddfe38bed3c74e76
 
 def calc_ema(dataframe, ema_size):
     """
@@ -30,6 +34,7 @@ def calc_ema(dataframe, ema_size):
         else:
             dataframe.loc[i, ema_name] = 0.00
     # Return modified dataframe
+<<<<<<< HEAD
     return dataframe
 
 # Function to calculate a crossover event between two EMAs
@@ -57,4 +62,6 @@ def ema_cross_calc(dataframe, ema_one, ema_two):
     dataframe = dataframe.drop(columns="position")
     dataframe = dataframe.drop(columns="pre_position")
     # return dataframe with  detected to the user
+=======
+>>>>>>> bb7d06cf9f09feb1fc6d1100ddfe38bed3c74e76
     return dataframe
