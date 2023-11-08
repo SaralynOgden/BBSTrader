@@ -33,7 +33,7 @@ def calc_ema(dataframe, ema_size):
     return dataframe
 
 # Function to calculate a crossover event between two EMAs
-def ema_cross_calc(dataframe, ema_one, ema_two):
+def ema_cross_calc(dataframe, short_term_ema, long_term_ema):
     """
     Function to calculate an  event. 
     :param datafram: dataframe object
@@ -42,8 +42,8 @@ def ema_cross_calc(dataframe, ema_one, ema_two):
     :return: dataframe with cross events
     """
     # Get the column names
-    ema_one_column = "ema_" + str(ema_one)
-    ema_two_column = "ema_" + str(ema_two)
+    ema_one_column = "ema_" + str(short_term_ema)
+    ema_two_column = "ema_" + str(long_term_ema)
 
     # Creata a position column
     dataframe['position'] = dataframe[ema_one_column] > dataframe[ema_two_column]

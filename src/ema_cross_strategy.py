@@ -19,35 +19,35 @@ def ema_cross_strategy(symbol, timeframe, short_term_ema, long_term_ema):
     # Append indicator columns to dataframe
     dataframe = calculate_indicators(
         data=dataframe,
-        ema_one=short_term_ema,
-        ema_two=long_term_ema
+        short_term_ema=short_term_ema,
+        long_term_ema=long_term_ema
     )
     return dataframe
 
 # Function to calculate the indicators for this strategy
-def calculate_indicators(data, ema_one, ema_two):
+def calculate_indicators(data, short_term_ema, long_term_ema):
     """
     Function to calculate the indicators for the EMA Cross strategy
     :param data: dataframe of the raw data
-    :param ema_one: integer for the first ema
-    :param ema_two: integer for the second ema
+    :param short_term_ema: integer for the first ema
+    :param long_term_ema: integer for the second ema
     :return: dataframe with updated columns
     """
     # Calculate the first EMA
     dataframe = indicator_lib.calc_ema(
         dataframe=data,
-        ema_size=ema_one
+        ema_size=short_term_ema
     )
     # Calculate the second ema
     dataframe = indicator_lib.calc_ema(
         dataframe=dataframe,
-        ema_size=ema_two
+        ema_size=long_term_ema
     )
     # Calculate the EMA Cross
     dataframe = indicator_lib.ema_cross_calc(
         dataframe=dataframe,
-        ema_one=ema_one,
-        ema_two=ema_two
+        short_term_ema=short_term_ema,
+        long_term_ema=long_term_ema
     )
     # Return the dataframe to the user with the indicators
     return dataframe

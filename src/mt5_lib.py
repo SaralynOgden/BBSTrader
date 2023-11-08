@@ -3,6 +3,8 @@ import MetaTrader5 as mt5
 
 import pandas
 
+from enum import Enum
+
 
 def connect(json_settings: dict) -> bool:
     """
@@ -77,7 +79,7 @@ def initialize_symbol(symbol) -> bool:
         print(f"Symbol {symbol} does not exist.")
         return False
 
-def get_candlesticks(symbol, timeframe: int, num_candlesticks: int):
+def get_candlesticks(symbol, timeframe, num_candlesticks: int):
     """
     Retrieves `num_candlesticks` candlesticks for symbol `symbol` from MetaTrader 5.
     :param `symbol`: The symbol to retrieve candlesticks for.
@@ -98,48 +100,34 @@ def get_candlesticks(symbol, timeframe: int, num_candlesticks: int):
 
 def get_mt5_timeframe(timeframe):
     """
-    Converts `timeframe` to a MetaTrader 5-readable timeframe.
-    :param `timeframe` The string to be converted to a MetaTrader 5 timeframe (int)
+    Gets a MetaTrader 5-readable timeframe.
+
+    :param timeframe: The to-be located timeframe as a string.
+    :return: A MetaTrader 5 timeframe.
     """
-    match timeframe:
-        case "M1":
-            return mt5.TIMEFRAME_M1
-        case "M2":
-            return mt5.TIMEFRAME_M2
-        case "M3":
-            return mt5.TIMEFRAME_M3
-        case "M4":
-            return mt5.TIMEFRAME_M4
-        case "M5":
-            return mt5.TIMEFRAME_M5
-        case "M6":
-            return mt5.TIMEFRAME_M6
-        case "M10":
-            return mt5.TIMEFRAME_M10
-        case "M12":
-            return mt5.TIMEFRAME_M12
-        case "M15":
-            return mt5.TIMEFRAME_M15
-        case "M20":
-            return mt5.TIMEFRAME_M20
-        case "M30":
-            return mt5.TIMEFRAME_M30
-        case "MN1":
-            return mt5.TIMEFRAME_MN1
-        case "H1":
-            return mt5.TIMEFRAME_H1
-        case "H2":
-            return mt5.TIMEFRAME_H2
-        case "H3":
-            return mt5.TIMEFRAME_H3
-        case "H4":
-            return mt5.TIMEFRAME_H4
-        case "H6":
-            return mt5.TIMEFRAME_H6
-        case "H8":
-            return mt5.TIMEFRAME_H8
-        case "D1":
-            return mt5.TIMEFRAME_D1
-        case _:
-            raise ValueError(f"{timeframe} is not a valid timeframe.")
+
+    try:
+        return Timeframe[timeframe].value
+    except KeyError as e:
+        print(f"{timeframe} is not a legal timeframe. {e}")
         
+class Timeframe(Enum):
+    M1  = mt5.TIMEFRAME_M1
+    M2  = mt5.TIMEFRAME_M2
+    M3  = mt5.TIMEFRAME_M3
+    M4  = mt5.TIMEFRAME_M4
+    M5  = mt5.TIMEFRAME_M5
+    M6  = mt5.TIMEFRAME_M6
+    M10 = mt5.TIMEFRAME_M10
+    M12 = mt5.TIMEFRAME_M12
+    M15 = mt5.TIMEFRAME_M15
+    M20 = mt5.TIMEFRAME_M20
+    M30 = mt5.TIMEFRAME_M30
+    MN1 = mt5.TIMEFRAME_MN1
+    H1  = mt5.TIMEFRAME_H1
+    H2  = mt5.TIMEFRAME_H2
+    H3  = mt5.TIMEFRAME_H3
+    H4  = mt5.TIMEFRAME_H4
+    H6  = mt5.TIMEFRAME_H6
+    H8  = mt5.TIMEFRAME_H8
+    D1  = mt5.TIMEFRAME_D1
