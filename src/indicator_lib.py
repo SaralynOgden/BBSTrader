@@ -2,7 +2,7 @@ import numpy as np
 
 def calc_ema(dataframe, ema_size):
     """
-    Calculates the Experimental Moving Average (EMA) of size `ema_size`
+    Calculates the Exponential Moving Average (EMA) of size `ema_size`
     for each entry in `dataframe`.
 
     :param `dataframe`: The dataframe from which EMAs will be determined.

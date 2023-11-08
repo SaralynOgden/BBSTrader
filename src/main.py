@@ -64,8 +64,8 @@ def main():
         data = ema_cross_strategy.ema_cross_strategy(
             symbol=symbol,
             timeframe=timeframe,
-            ema_one=50,
-            ema_two=200
+            short_term_ema=50,
+            long_term_ema=200
         )
         print(data)
 

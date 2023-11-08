@@ -1,7 +1,7 @@
 import indicator_lib
 import mt5_lib
 
-def ema_cross_strategy(symbol, timeframe, ema_one, ema_two):
+def ema_cross_strategy(symbol, timeframe, short_term_ema, long_term_ema):
     """
     Function which runs the EMA Cross Strategy
     :param symbol: string of the sumbol to be queried
@@ -10,27 +10,22 @@ def ema_cross_strategy(symbol, timeframe, ema_one, ema_two):
     :param ema_two: intefer of the highest timeframe length for EMA
     """
 
-    ### Pseudo Code Steps
-    # Step 1: Retreive data -> get_data()
-    # Step 2: Calculated indicators -> calc_ind()
-    # Step 3: Determine if a trade event has occured -> det_trade()
-    # Step 4: Return information back to the user
-
-    # Step 1
-    data = get_data(
+    # Get vanilla MetaTrader 5 dataframe
+    dataframe = mt5_lib.get_candlesticks(
         symbol=symbol,
-        timeframe=timeframe
+        timeframe=timeframe,
+        num_candlesticks=1000
     )
-    # Step 2
-    data = calc_ind(
-        data=data,
-        ema_one=ema_one,
-        ema_two=ema_two
+    # Append indicator columns to dataframe
+    dataframe = calculate_indicators(
+        data=dataframe,
+        ema_one=short_term_ema,
+        ema_two=long_term_ema
     )
-    return data
+    return dataframe
 
 # Function to calculate the indicators for this strategy
-def calc_ind(data, ema_one, ema_two):
+def calculate_indicators(data, ema_one, ema_two):
     """
     Function to calculate the indicators for the EMA Cross strategy
     :param data: dataframe of the raw data
@@ -56,20 +51,3 @@ def calc_ind(data, ema_one, ema_two):
     )
     # Return the dataframe to the user with the indicators
     return dataframe
-
-def get_data(symbol, timeframe):
-    """
-    Function to retreive data from MT5. Data is in the from of candlesticks and is retreived as a dataframe
-    :param symbol: string of the symbol to be retreived
-    :param timeframe: string of the timeframe to be retreived
-    :return: dataframe to user
-    """
-
-    # Retreive the data
-    data = mt5_lib.get_candlesticks(
-        symbol=symbol,
-        timeframe=timeframe,
-        num_candlesticks=1000
-    )
-    # Return data
-    return data
