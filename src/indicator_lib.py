@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import numpy as np
+=======
 import numpy
+>>>>>>> bb7d06cf9f09feb1fc6d1100ddfe38bed3c74e76
 
 def calc_ema(dataframe, ema_size):
     """
@@ -30,4 +34,34 @@ def calc_ema(dataframe, ema_size):
         else:
             dataframe.loc[i, ema_name] = 0.00
     # Return modified dataframe
+<<<<<<< HEAD
+    return dataframe
+
+# Function to calculate a crossover event between two EMAs
+def ema_cross_calc(dataframe, ema_one, ema_two):
+    """
+    Function to calculate an  event. 
+    :param datafram: dataframe object
+    :param ema_one: integer of EMA 1 size
+    :param ema_two: integer of EMA 2 size
+    :return: dataframe with cross events
+    """
+    # Get the column names
+    ema_one_column = "ema_" + str(ema_one)
+    ema_two_column = "ema_" + str(ema_two)
+
+    # Creata a position column
+    dataframe['position'] = dataframe[ema_one_column] > dataframe[ema_two_column]
+    # Create a pre-position column
+    dataframe['pre_position'] = dataframe['position'].shift(1)
+    # Drop any N/A values => uses ".dropna"
+    dataframe.dropna(inplace=True) 
+    # Define crossover events => lambda function, needs two boolean values (ommitted from tutorial)
+    dataframe['ema_cross'] = np.where(dataframe['position'] == dataframe['pre_position'],False,True)
+    # Drop the position and pre_position columns => uses ".drop"
+    dataframe = dataframe.drop(columns="position")
+    dataframe = dataframe.drop(columns="pre_position")
+    # return dataframe with  detected to the user
+=======
+>>>>>>> bb7d06cf9f09feb1fc6d1100ddfe38bed3c74e76
     return dataframe
