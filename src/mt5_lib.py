@@ -23,27 +23,11 @@ def connect(json_settings: dict) -> bool:
         initialized = mt5.initialize(
             pathway, login=login, password=password, server=server, timeout=timeout
         )
-<<<<<<< HEAD
-        if initialized:
-            print("Trading bot initialized!")
-=======
->>>>>>> bb7d06cf9f09feb1fc6d1100ddfe38bed3c74e76
         if not initialized:
             raise ConnectionError
 
         # Safe to login here. Returns true if login succeeds. Otherwise, returns false.
-<<<<<<< HEAD
-        logged_in = mt5.login(
-            login=login, password=password, server=server, timeout=timeout
-        )
-
-        if logged_in:
-            print("Trading bot login successful!")
-        if not logged_in:
-            raise PermissionError
-=======
         return mt5.login(login=login, password=password, server=server, timeout=timeout)
->>>>>>> bb7d06cf9f09feb1fc6d1100ddfe38bed3c74e76
 
     except KeyError as e:
         print(f"The queried dictionary key does not exist: {e.args}")
@@ -51,13 +35,6 @@ def connect(json_settings: dict) -> bool:
     except ConnectionError as e:
         print(f"Could not connect to MetaTrader5: {e.args}")
         raise e
-<<<<<<< HEAD
-    except PermissionError as e:
-        print(f"Login failed to connect to MetaTrader 5: {e.args}")
-        raise e
-=======
-
->>>>>>> bb7d06cf9f09feb1fc6d1100ddfe38bed3c74e76
 
 def initialize_symbol(symbol) -> bool:
     """

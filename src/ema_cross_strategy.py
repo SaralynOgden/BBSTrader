@@ -1,33 +1,27 @@
 import indicator_lib
 import mt5_lib
 
-def ema_cross_strategy(symbol, timeframe, ema_one, ema_two):
+def ema_cross_strategy(symbol, timeframe, short_term_ema, long_term_ema):
     """
     Function which runs the EMA Cross Strategy
     :param symbol: string of the sumbol to be queried
     :param timeframe: string of the timeframe to be queried
-    :param ema_one: integer of the lowest timeframe length for EMA
-    :param ema_two: intefer of the highest timeframe length for EMA
+    :param short_term_ema: integer of the lowest timeframe length for EMA
+    :param long_term_ema: integer of the highest timeframe length for EMA
     """
 
-    ### Pseudo Code Steps
-    # Step 1: Retreive data -> get_data()
-    # Step 2: Calculated indicators -> calc_ind()
-    # Step 3: Determine if a trade event has occured -> det_trade()
-    # Step 4: Return information back to the user
-
-    # Step 1
-    data = get_data(
+    # Get candlesticks dataframe
+    candlesticks_dataframe = get_candlesticks_dataframe(
         symbol=symbol,
         timeframe=timeframe
     )
-    # Step 2
-    data = calc_ind(
-        data=data,
-        ema_one=ema_one,
-        ema_two=ema_two
+    # Append indicators to dataframe
+    candlesticks_dataframe = calc_ind(
+        data=candlesticks_dataframe,
+        ema_one=short_term_ema,
+        ema_two=long_term_ema
     )
-    return data
+    return candlesticks_dataframe
 
 # Function to calculate the indicators for this strategy
 def calc_ind(data, ema_one, ema_two):
@@ -40,12 +34,12 @@ def calc_ind(data, ema_one, ema_two):
     """
     # Calculate the first EMA
     dataframe = indicator_lib.calc_ema(
-        dataframe=data,
+        candlesticks_dataframe=data,
         ema_size=ema_one
     )
     # Calculate the second ema
     dataframe = indicator_lib.calc_ema(
-        dataframe=dataframe,
+        candlesticks_dataframe=dataframe,
         ema_size=ema_two
     )
     # Calculate the EMA Cross
@@ -57,19 +51,19 @@ def calc_ind(data, ema_one, ema_two):
     # Return the dataframe to the user with the indicators
     return dataframe
 
-def get_data(symbol, timeframe):
+def get_candlesticks_dataframe(symbol, timeframe):
     """
-    Function to retreive data from MT5. Data is in the from of candlesticks and is retreived as a dataframe
+    Function to retreive candlesticks from MT5 as a dataframe.
     :param symbol: string of the symbol to be retreived
     :param timeframe: string of the timeframe to be retreived
     :return: dataframe to user
     """
 
     # Retreive the data
-    data = mt5_lib.get_candlesticks(
+    candlesticks_dataframe = mt5_lib.get_candlesticks(
         symbol=symbol,
         timeframe=timeframe,
         num_candlesticks=1000
     )
     # Return data
-    return data
+    return candlesticks_dataframe
