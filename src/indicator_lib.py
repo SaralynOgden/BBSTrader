@@ -37,20 +37,23 @@ def ema_cross_calc(dataframe, short_term_ema, long_term_ema):
     """
     Function to calculate an  event. 
     :param datafram: dataframe object
-    :param ema_one: integer of EMA 1 size
-    :param ema_two: integer of EMA 2 size
+    :param short_term_ema: integer of EMA 1 size
+    :param long_term_ema: integer of EMA 2 size
     :return: dataframe with cross events
     """
     # Get the column names
-    ema_one_column = "ema_" + str(short_term_ema)
-    ema_two_column = "ema_" + str(long_term_ema)
+    short_term_ema_column = "ema_" + str(short_term_ema)
+    long_term_ema_column = "ema_" + str(long_term_ema)
 
     # Creata a position column
-    dataframe['position'] = dataframe[ema_one_column] > dataframe[ema_two_column]
+    dataframe['position'] = dataframe[short_term_ema_column] > dataframe[long_term_ema_column]
+
     # Create a pre-position column
     dataframe['pre_position'] = dataframe['position'].shift(1)
+
     # Drop any N/A values => uses ".dropna"
-    dataframe.dropna(inplace=True) 
+    dataframe.dropna(inplace=True)
+    
     # Define crossover events => lambda function, needs two boolean values (ommitted from tutorial)
     dataframe['ema_cross'] = np.where(dataframe['position'] == dataframe['pre_position'],False,True)
     # Drop the position and pre_position columns => uses ".drop"

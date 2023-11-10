@@ -6,8 +6,8 @@ def ema_cross_strategy(symbol, timeframe, short_term_ema, long_term_ema):
     Function which runs the EMA Cross Strategy
     :param symbol: string of the sumbol to be queried
     :param timeframe: string of the timeframe to be queried
-    :param ema_one: integer of the lowest timeframe length for EMA
-    :param ema_two: intefer of the highest timeframe length for EMA
+    :param short_term_ema: integer of the lowest timeframe length for EMA
+    :param long_term_ema: intefer of the highest timeframe length for EMA
     """
 
     # Get vanilla MetaTrader 5 dataframe

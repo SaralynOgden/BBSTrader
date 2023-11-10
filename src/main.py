@@ -1,11 +1,10 @@
-"""json import"""
 import json
 import os
+import pandas
 
 import mt5_lib as trader
 import indicator_lib as ind
-import ema_cross_strategy
-import pandas
+import ema_cross_strategy as strats
 
 # Path to MetaTrader5 login details.
 ACCOUNT_SETTINGS_PATH = "../settings.json"
@@ -61,7 +60,7 @@ def main():
     for symbol in symbols_arr:
         # Shows all columns
         pandas.set_option('display.max_columns', None)
-        data = ema_cross_strategy.ema_cross_strategy(
+        data = strats.ema_cross_strategy(
             symbol=symbol,
             timeframe=timeframe,
             short_term_ema=50,

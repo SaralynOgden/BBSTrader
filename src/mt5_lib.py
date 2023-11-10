@@ -1,10 +1,7 @@
-"""MetaTrader5 API import"""
-import MetaTrader5 as mt5
-
-import pandas
-
 from enum import Enum
 
+import pandas
+import MetaTrader5 as mt5
 
 def connect(json_settings: dict) -> bool:
     """
@@ -27,7 +24,7 @@ def connect(json_settings: dict) -> bool:
         )
         if initialized:
             print("Trading bot initialized!")
-        if not initialized:
+        else:
             raise ConnectionError
 
         # Safe to login here. Returns true if login succeeds. Otherwise, returns false.
@@ -37,7 +34,7 @@ def connect(json_settings: dict) -> bool:
 
         if logged_in:
             print("Trading bot login successful!")
-        if not logged_in:
+        else:
             raise PermissionError
 
     except KeyError as e:
