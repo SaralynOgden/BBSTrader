@@ -1,0 +1,9 @@
+{
+    "mt5": {
+        "server": "ICMarketsEU-Demo",
+        "terminal_pathway": "C:\\Program Files\\MetaTrader 5\\terminal64.exe",
+        "symbols": ["EURJPY"],
+        "timeout": 60000,
+        "timeframe": "M1"
+    }
+}
