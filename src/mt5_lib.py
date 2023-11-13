@@ -3,7 +3,7 @@ from enum import Enum
 import pandas
 import MetaTrader5 as mt5
 
-def connect(json_settings: dict) -> bool:
+def connect(json_settings: dict, credentials: dict) -> bool:
     """
     Attempts to initialize and log into MetaTrader5.
 
@@ -14,8 +14,8 @@ def connect(json_settings: dict) -> bool:
     """
     try:
         pathway = json_settings["mt5"]["terminal_pathway"]
-        login = json_settings["mt5"]["login"]
-        password = json_settings["mt5"]["password"]
+        login = credentials["login"]
+        password = credentials["password"]
         server = json_settings["mt5"]["server"]
         timeout = json_settings["mt5"]["timeout"]
 
