@@ -26,7 +26,7 @@ def calc_lot_size(balance, risk_pct, stop_loss, stop_price, symbol):
         raw_lot_size = pip_value / 1000
     
     elif symbol_name == "USDCAD":
-        pip_size 0.0001
+        pip_size = 0.0001
 
         pip_risk = abs((stop_price - stop_loss) / pip_size)
         pip_value = currency_risk / pip_risk * stop_price
