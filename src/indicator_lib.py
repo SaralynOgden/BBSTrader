@@ -1,4 +1,5 @@
 import numpy as np
+import utils
 
 def calc_ema(ema_x_strategy_table, ema_size):
     """
@@ -9,7 +10,7 @@ def calc_ema(ema_x_strategy_table, ema_size):
     :param `ema_size`: The EMA size
     """
     # Column name to append to dataframe
-    ema_name = "ema_" + str(ema_size)
+    ema_name = utils.get_ema_name(ema_size)
 
     # Create EMA multiplier
     multiplier = 2/(ema_size + 1)
@@ -39,8 +40,8 @@ def ema_cross_calc(ema_x_strategy_table, short_term_ema_length, long_term_ema_le
     :param long_term_ema: length of long-term ema
     """
     # Get the column names
-    short_term_ema_column = "ema_" + str(short_term_ema_length)
-    long_term_ema_column = "ema_" + str(long_term_ema_length)
+    short_term_ema_column = utils.get_ema_name(short_term_ema_length)
+    long_term_ema_column = utils.get_ema_name(long_term_ema_length)
 
     # Creata a position column
     ema_x_strategy_table['position'] = ema_x_strategy_table[short_term_ema_column] > ema_x_strategy_table[long_term_ema_column]
