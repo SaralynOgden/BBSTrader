@@ -24,7 +24,6 @@ def ema_cross_strategy(symbol, timeframe, short_term_ema_length, long_term_ema_l
     if trade_event['ema_cross'].values:
         new_trade = True
         comment = f"EMA_Cross_strategy_{symbol}"
-        print(comment)
         make_trade_outcome = mt.make_trade(balance, comment, risk_pct, symbol, trade_event['take_profit'].values, trade_event['stop_price'].values, trade_event['stop_loss'].values)
     else:
         make_trade_outcome = False
