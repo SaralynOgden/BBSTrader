@@ -1,8 +1,9 @@
 import indicator_lib
 import mt5_lib
+import make_trade as mt
 import utils
 
-def ema_cross_strategy(symbol, timeframe, short_term_ema_length, long_term_ema_length):
+def ema_cross_strategy(symbol, timeframe, short_term_ema_length, long_term_ema_length, balance, risk_pct):
     """
     Function which runs the EMA Cross Strategy
     :param symbol: string of the symbol to be queried
@@ -18,10 +19,16 @@ def ema_cross_strategy(symbol, timeframe, short_term_ema_length, long_term_ema_l
     # Append indicator columns to dataframe
     calculate_indicators(ema_x_strategy_table, short_term_ema_length, long_term_ema_length)
 
-    # Determine if a trade event has occurred
-    det_trade(ema_x_strategy_table, short_term_ema_length, long_term_ema_length)
+    trade_event = ema_x_strategy_table.tail(1).copy()
 
-    return ema_x_strategy_table
+    if trade_event['ema_cross'].values:
+        new_trade = True
+        comment = f"EMA_Cross_strategy_{symbol}"
+        make_trade_outcome = mt.make_trade(balance, comment, risk_pct, symbol, trade_event['take_profit'].values, trade_event['stop_price'].values, trade_event['stop_loss'].values)
+    else:
+        make_trade_outcome = False
+
+    return make_trade_outcome
 
 # Function to determine on which symbols trade events should occur and calculate their trade signals
 def det_trade(ema_x_strategy_table, short_term_ema_length, long_term_ema_length):

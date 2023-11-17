@@ -63,7 +63,9 @@ def main():
     for symbol in symbols_arr:
         # Shows all columns
         pandas.set_option('display.max_columns', None)
-        ema_x_strategy_table = strats.ema_cross_strategy(symbol, timeframe, 50, 200)
+
+        ema_x_strategy_table = strats.ema_cross_strategy(symbol, timeframe, 50, 200, 10000, 0.03)
+
         print(ema_x_strategy_table)
 
 if __name__ == '__main__':

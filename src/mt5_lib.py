@@ -93,8 +93,6 @@ def get_candlesticks(symbol, timeframe, num_candlesticks: int):
     #return a pandas dataframe
     return pandas.DataFrame(candles)
 
-
-
 def get_mt5_timeframe(timeframe):
     """
     Gets a MetaTrader 5-readable timeframe.
@@ -108,6 +106,74 @@ def get_mt5_timeframe(timeframe):
     except KeyError as e:
         print(f"{timeframe} is not a legal timeframe. {e}")
         
+def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, stop_price, direct=False):
+    """
+    :param order_type : String. Options: SELL_STOP, BUY_STOP
+    :param symbol     : String. Symbol to trade
+    :param volume     : Float. Trade volume
+    :param stop_loss  : Float. Stop loss value
+    :param take_profit: Float. Take profit value
+    :param comment    : String. Comment used to handle multi-algorithmic trading
+    :param stop_price : Float. Stop price value
+    :param direct     : Boolean. Default is false. When true, bypasses order checking
+    :return           : Boolean. True if order placed successfully. Otherwise, false.
+    """
+
+    # Ensure proper types and formatting
+    volume = round(float(volume), 2)
+
+    stop_loss = round(float(stop_loss), 4)
+    
+    take_profit = round(float(take_profit), 4)
+
+    stop_price = round(float(stop_price), 4)
+
+    # Request dictionary
+    request = {
+        "symbol": symbol,
+        "volume": volume,
+        "sl": stop_loss,
+        "tp": take_profit,
+        "type_time": mt5.ORDER_TIME_GTC,
+        "comment": comment
+    }
+
+    # Update request based on order type
+    if order_type == "SELL_STOP":
+        request['type'] = mt5.ORDER_TYPE_SELL_STOP
+        request['action'] = mt5.TRADE_ACTION_PENDING
+        request['type_filling'] = mt5.ORDER_FILLING_RETURN
+        
+        request['price'] = stop_price if stop_price > 0 else ValueError("Stop price must be a non-zero positive value")
+
+    elif order_type == "BUY_STOP":
+        request['type'] = mt5.ORDER_TYPE_BUY_STOP
+        request['action'] = mt5.TRADE_ACTION_PENDING
+        request['type_filling'] = mt5.ORDER_FILLING_RETURN
+
+        request['price'] = stop_price if stop_price > 0 else ValueError("Stop price must be a non-zero positive value")
+
+    else:
+        raise ValueError(f"Unsupported order type given: {order_type}")
+
+    # No order checking
+    if direct:
+        order_result = mt5.order_send(request)
+        # Order send status: OK
+        if order_result[0] == 10009:
+            return order_result[2]
+        else:
+            raise Exception(f"Error. Order code: {order_result[0]}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
+    else:
+        result = mt5.order_check(request)
+
+        # Order check status: OK
+        if result[0] == 0:
+            return place_order(order_type, symbol, volume, stop_price, stop_loss, take_profit, comment, True)
+        else:
+            raise Exception(f"Order Code: {result[0]}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
+
+
 class Timeframe(Enum):
     M1  = mt5.TIMEFRAME_M1
     M2  = mt5.TIMEFRAME_M2
