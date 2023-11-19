@@ -13,10 +13,10 @@ def connect(json_settings: dict, credentials: dict) -> bool:
     Otherwise, false.
     """
     try:
-        pathway = json_settings["mt5"]["terminal_pathway"]
-        login = credentials["login"]
-        password = credentials["password"]
-        server = json_settings["mt5"]["server"]
+        pathway = credentials["mt5"]["terminal_pathway"]
+        login = credentials["mt5"]["login"]
+        password = credentials["mt5"]["password"]
+        server = credentials["mt5"]["server"]
         timeout = json_settings["mt5"]["timeout"]
 
         initialized = mt5.initialize(
@@ -46,6 +46,8 @@ def connect(json_settings: dict, credentials: dict) -> bool:
     except PermissionError as e:
         print(f"Login failed to connect to MetaTrader 5: {e.args}")
         raise e
+    
+    return True
 
 def initialize_symbol(symbol) -> bool:
     """

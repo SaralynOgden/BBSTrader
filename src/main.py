@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import pandas
 
 import mt5_lib as trader
@@ -27,6 +28,38 @@ def get_json_from_file(file_path: str) -> dict:
 
     raise FileExistsError(f"Could not locate resource: {file_path}")
 
+def run_strategy(json_settings):
+    """
+    Function to execute the stategy in main
+    :param json_settings: json of project settings
+    :param credentials: json of user credentials
+    :return: Boolean. True if strategy ran successfully with no errors. Else False.
+    """
+    # Get symbols array from settings.json
+    symbols_arr = json_settings["mt5"]["symbols"]
+
+    # Get timeframe from settings.json
+    timeframe=json_settings["mt5"]["timeframe"]
+
+    # Initialize all symbols
+    for symbol in symbols_arr:
+        try:
+            trader.initialize_symbol(symbol)
+        except Exception as e:
+            print(e)
+    
+    # Get a table of ema calculations for every initialized symbol
+    for symbol in symbols_arr:
+
+        ema_x_strategy_table = strats.ema_cross_strategy(symbol, timeframe, 50, 200, 10000, 0.03)
+
+        # Console output
+        if (ema_x_strategy_table):
+            print(f"Trade made on {symbol}.")
+        else:
+            print(f"No trade for {symbol}.")
+
+    return True
 
 def main():
     """
@@ -45,28 +78,35 @@ def main():
 
     # Establish connection to MetaTrader. trader.connect() throws a
     # ConnectionError if a connection cannot be established
-    trader.connect(json_settings, credentials)
+    connected = trader.connect(json_settings, credentials)
 
-    # Get symbols array from settings.json
-    symbols_arr = json_settings["mt5"]["symbols"]
+    # Shows all columns
+    pandas.set_option('display.max_columns', None)
 
-    # Initialize all symbols
-    for symbol in symbols_arr:
-        try:
-            trader.initialize_symbol(symbol)
-        except Exception as e:
-            print(e)
-        
-    timeframe=json_settings["mt5"]["timeframe"]
-    
-    # Get a table of ema calculations for every initialized symbol
-    for symbol in symbols_arr:
-        # Shows all columns
-        pandas.set_option('display.max_columns', None)
+    if connected:
+        current_time = 0
+        previous_time = 0
+        # Get timeframe from settings.json
+        timeframe=json_settings["mt5"]["timeframe"]
+        while True:
+            # Get new candle
+            new_candle = trader.get_candlesticks("ETHUSD",timeframe,1)
+            
+            current_time = new_candle['time'][0]
 
-        ema_x_strategy_table = strats.ema_cross_strategy(symbol, timeframe, 50, 200, 10000, 0.03)
+            if(current_time != previous_time):
+                # Discovered a new candle
+                print("New candlestick. Time to trade!")
 
-        print(ema_x_strategy_table)
+                # Update previous time
+                previous_time = current_time
+
+                strategy = run_strategy(json_settings)
+
+            else:
+                # No new candles
+                print("No new candles. Sleeping.")
+                time.sleep(1)
 
 if __name__ == '__main__':
     main()
