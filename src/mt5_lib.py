@@ -175,6 +175,83 @@ def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, sto
         else:
             raise Exception(f"Order Code: {result[0]}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
 
+def cancel_order(order_number):
+    """
+    Function to cancel an order indentified by an order number
+    :param order_number: int representing the order number from MT5
+    :return: Boolean. Tue = cancelled. False == Not cancelled.
+    """
+    # Create request
+    request = {
+        "action": mt5.TRADE_ACTION_REMOVE,
+        "order": order_number,
+        "comment": "order removed"    
+    }
+    # Attempt to send the order to MT5
+    try: 
+        order_result = mt5.order_send(request)
+        if order_result[0] == 10009:
+            print(f"Order {order_number} successfully cancelled")
+            return True
+        else:
+            print(f"Order {order_number} unable to be cancelled")
+            return False
+    except Exception as e:
+        print(f"Error cancelling order {order_number}. Error {e}")
+
+def get_all_open_orders():
+    """
+    Function to retrieve all open orders from MetaTrader 5
+    :return: List of all open orders.
+    """
+    return mt5.orders_get()
+
+def get_filtered_list_of_orders(symbol, comment):
+    """
+    Function to retreive a filtered list of open orders from Mt5. Filtering is based on symbol and comment
+    :param symbol: string of the symbol being traded
+    :param comment: string of the comment
+    :return: (filtered) list of orders
+    """
+    # Retrieve a list of open orders, filtered by symbol
+    open_orders_by_symbol = mt5.orders_get(symbol)
+    # Check if any order were retreived
+    if open_orders_by_symbol is None or len(open_orders_by_symbol) == 0:
+        return []
+    
+    # Convert the retrieved orders into a dataframe
+    open_orders_dataframe = pandas.DataFrame(
+        list(open_orders_by_symbol),
+        columns=open_orders_by_symbol[0]._asdict().keys()
+    )
+
+    # From the open orders dataframe, fitler orders by comment
+    open_orders_dataframe = open_orders_dataframe[open_orders_dataframe['comment'] == comment]
+    # Create a list to store the open order numbers
+    open_orders = {}
+    # Iterate through the dataframe and add order numbers to the list
+    for order in open_orders_dataframe['ticket']:
+        open_orders.append(order)
+    return open_orders
+
+def cancel_filtered_orders(symbol, comment):
+    """
+    Function to cancel a list of filtered orders. Based upon two filters: symbol & comment
+    :param symbol: string of symbol
+    :param commment: string of the commment
+    :return: Boolean. True = orders cancelled. False = issue with cancellation request
+    """
+    # Retrieve a list of the orders based upon the filter
+    orders = get_filtered_list_of_orders(symbol, comment)
+    if len(orders) > 0:
+        # Iterate and cancel
+        for order in orders:
+            cancel_outcome = cancel_order(order)
+            if not cancel_outcome:
+                return False
+        return True
+    else:
+        return True
 
 class Timeframe(Enum):
     M1  = mt5.TIMEFRAME_M1
