@@ -66,7 +66,7 @@ def run_strategy(json_settings):
         trader.cancel_filtered_orders(symbol, comment_string)
 
         # Boolean from the strategy
-        ema_x_strategy_table = strats.ema_cross_strategy(symbol, timeframe, 50, 200, 10000, 0.03)
+        ema_x_strategy_table = strats.ema_cross_strategy(symbol, timeframe, 2, 200, 10000, 0.03)
 
         # Console output
         if (ema_x_strategy_table):
