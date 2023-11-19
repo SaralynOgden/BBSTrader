@@ -19,10 +19,11 @@ def ema_cross_strategy(symbol, timeframe, short_term_ema_length, long_term_ema_l
     # Append indicator columns to dataframe
     calculate_indicators(ema_x_strategy_table, short_term_ema_length, long_term_ema_length)
 
+    det_trade(ema_x_strategy_table, short_term_ema_length, long_term_ema_length)
+
     trade_event = ema_x_strategy_table.tail(1).copy()
 
     if trade_event['ema_cross'].values:
-        new_trade = True
         comment = f"EMA_Cross_strategy_{symbol}"
         make_trade_outcome = mt.make_trade(balance, comment, risk_pct, symbol, trade_event['take_profit'].values, trade_event['stop_price'].values, trade_event['stop_loss'].values)
     else:
@@ -61,7 +62,7 @@ def det_trade(ema_x_strategy_table, short_term_ema_length, long_term_ema_length)
                 distance = stop_price - stop_loss
                 take_profit = stop_price + distance
             # Red candle (SELL)
-            else:
+            elif ema_x_strategy_table.loc[i, 'open'] > ema_x_strategy_table.loc[i, 'close']:
                 stop_price = ema_x_strategy_table.loc[i, 'low']
                 distance = stop_loss - stop_price
                 take_profit = stop_price - distance

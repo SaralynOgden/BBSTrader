@@ -1,7 +1,7 @@
 {
     "mt5": {
-        "symbols": ["ETHUSD"],
+        "symbols": ["BCHUSD"],
         "timeout": 60000,
-        "timeframe": "M1"
+        "timeframe": "one_minute"
     }
 }
