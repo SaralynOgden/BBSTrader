@@ -171,7 +171,7 @@ def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, sto
 
         # Order check status: OK
         if result[0] == 0:
-            return place_order(order_type, symbol, volume, stop_price, stop_loss, take_profit, comment, True)
+            return place_order(order_type, symbol, volume, stop_loss, take_profit, comment, stop_price, True)
         else:
             raise Exception(f"Order Code: {result[0]}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
 

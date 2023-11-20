@@ -1,6 +1,6 @@
 {
     "mt5": {
-        "symbols": ["BCHUSD"],
+        "symbols": ["EURCHF"],
         "timeout": 60000,
         "timeframe": "one_minute"
     }
