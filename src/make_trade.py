@@ -16,10 +16,10 @@ def make_trade(balance, comment, risk_pct, symbol, take_profit, stop_loss, stop_
     """
 
     # Get proper types and format
-    balance = (round(float(balance), 2))
-    take_profit = (round(float(take_profit), 4))
-    stop_loss = (round(float(stop_loss), 4))
-    stop_price = (round(float(stop_price), 4))
+    balance = (round(float(balance), 6))
+    take_profit = (round(float(take_profit), 6))
+    stop_loss = (round(float(stop_loss), 6))
+    stop_price = (round(float(stop_price), 6))
 
     # Get lot size
     lot_size = hf.calc_lot_size(balance, risk_pct, stop_loss, stop_price, symbol)
@@ -28,7 +28,7 @@ def make_trade(balance, comment, risk_pct, symbol, take_profit, stop_loss, stop_
     (trade_type := "BUY_STOP") if stop_price > stop_loss else (trade_type := "SELL_STOP")
 
     # Send trade
-    trade_outcome = trader.place_order(trade_type, symbol, lot_size, stop_loss, stop_price, take_profit, comment, False)
+    trade_outcome = trader.place_order(trade_type, symbol, lot_size, stop_loss, take_profit, comment, stop_price, False)
 
     return trade_outcome
 

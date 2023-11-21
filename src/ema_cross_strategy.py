@@ -14,7 +14,7 @@ def ema_cross_strategy(symbol, timeframe, short_term_ema_length, long_term_ema_l
     """
 
     # Get vanilla MetaTrader 5 dataframe
-    ema_x_strategy_table = mt5_lib.get_candlesticks(symbol, timeframe, 1000)
+    ema_x_strategy_table = mt5_lib.get_candlesticks(symbol, timeframe, long_term_ema_length + 2)
 
     # Append indicator columns to dataframe
     calculate_indicators(ema_x_strategy_table, short_term_ema_length, long_term_ema_length)
@@ -52,7 +52,7 @@ def det_trade(ema_x_strategy_table, short_term_ema_length, long_term_ema_length)
     ema_x_strategy_table['stop_price'] = 0.0
     ema_x_strategy_table['take_profit'] = 0.0
 
-    for i in range(min_value + 1, len(ema_x_strategy_table)):
+    for i in range(min_value, len(ema_x_strategy_table) + 1):
         if ema_x_strategy_table.loc[i, 'ema_cross']:
             stop_loss = ema_x_strategy_table.loc[i, stop_loss_column_name]
 
