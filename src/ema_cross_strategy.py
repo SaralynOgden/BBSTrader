@@ -27,7 +27,7 @@ def ema_cross_strategy(symbol, timeframe, short_term_ema_length, long_term_ema_l
     # if this is so, then the rounded stop loss and stop price will be the same and we should not trade
     if trade_event['ema_cross'].values and (float(trade_event['stop_loss']) != float(trade_event['stop_price'])):
         comment = f"EMA_Cross_strategy_{symbol}"
-        make_trade_outcome = mt.make_trade(balance, comment, risk_pct, symbol, trade_event['take_profit'].values, trade_event['stop_price'].values, trade_event['stop_loss'].values)
+        make_trade_outcome = mt.make_trade(balance, comment, risk_pct, symbol, trade_event['take_profit'].values, trade_event['stop_loss'].values, trade_event['stop_price'].values)
     else:
         make_trade_outcome = False
 

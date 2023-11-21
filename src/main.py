@@ -103,14 +103,14 @@ def main():
     # request = {
     #     "symbol": 'BCHUSD',
     #     "volume": 1.0,
-    #     "sl": 226.65, # should be larger than the price
-    #     "tp": 216.72, # should be the smallest
+    #     "sl": 226.64, # should be largest
+    #     "tp": 226.13, # should be the smallest
     #     "type_time": 0,
     #     "comment": 'EMA cross strategy',
     #     "type": mt5.ORDER_TYPE_SELL_STOP,
     #     "action": mt5.TRADE_ACTION_PENDING,
     #     "type_filling":mt5.ORDER_FILLING_RETURN,
-    #     "price": 225.69 # closing price of the last one
+    #     "price": 226.16 # closing price of the last one
     # }
     # result = mt5.order_check(request)
 
