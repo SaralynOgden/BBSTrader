@@ -23,7 +23,9 @@ def ema_cross_strategy(symbol, timeframe, short_term_ema_length, long_term_ema_l
 
     trade_event = ema_x_strategy_table.tail(1).copy()
 
-    if trade_event['ema_cross'].values:
+    # it is possible to have a cross that leads to a difference less than a penny
+    # if this is so, then the rounded stop loss and stop price will be the same and we should not trade
+    if trade_event['ema_cross'].values and (float(trade_event['stop_loss']) != float(trade_event['stop_price'])):
         comment = f"EMA_Cross_strategy_{symbol}"
         make_trade_outcome = mt.make_trade(balance, comment, risk_pct, symbol, trade_event['take_profit'].values, trade_event['stop_price'].values, trade_event['stop_loss'].values)
     else:
@@ -67,9 +69,9 @@ def det_trade(ema_x_strategy_table, short_term_ema_length, long_term_ema_length)
                 distance = stop_loss - stop_price
                 take_profit = stop_price - distance
 
-            ema_x_strategy_table.loc[i, 'stop_loss'] = stop_loss
-            ema_x_strategy_table.loc[i, 'stop_price'] = stop_price
-            ema_x_strategy_table.loc[i, 'take_profit'] = take_profit
+            ema_x_strategy_table.loc[i, 'stop_loss'] = (round(float(stop_loss), 2))
+            ema_x_strategy_table.loc[i, 'stop_price'] = (round(float(stop_price), 2))
+            ema_x_strategy_table.loc[i, 'take_profit'] = (round(float(take_profit), 2))
 
 # Function to calculate the indicators for this strategy
 def calculate_indicators(ema_x_strategy_table, short_term_ema_length, long_term_ema_length):

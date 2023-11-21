@@ -124,11 +124,11 @@ def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, sto
     # Ensure proper types and formatting
     volume = round(float(volume), 2)
 
-    stop_loss = round(float(stop_loss), 4)
+    stop_loss = round(float(stop_loss), 2)
     
-    take_profit = round(float(take_profit), 4)
+    take_profit = round(float(take_profit), 2)
 
-    stop_price = round(float(stop_price), 4)
+    stop_price = round(float(stop_price), 2)
 
     # Request dictionary
     request = {
@@ -165,7 +165,7 @@ def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, sto
         if order_result[0] == 10009:
             return order_result[2]
         else:
-            raise Exception(f"Error. Order code: {order_result[0]}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
+            raise Exception(f"Error. Order code: {order_result[0].comment}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
     else:
         result = mt5.order_check(request)
 
@@ -173,7 +173,7 @@ def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, sto
         if result[0] == 0:
             return place_order(order_type, symbol, volume, stop_loss, take_profit, comment, stop_price, True)
         else:
-            raise Exception(f"Order Code: {result[0]}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
+            raise Exception(f"Order Code: {result[0].comment}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
 
 def cancel_order(order_number):
     """
