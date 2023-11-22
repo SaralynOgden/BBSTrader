@@ -55,7 +55,8 @@ def det_trade(ema_x_strategy_table, short_term_ema_length, long_term_ema_length)
     ema_x_strategy_table['take_profit'] = 0.0
 
     for i in range(min_value, len(ema_x_strategy_table) + 1):
-        if ema_x_strategy_table.loc[i, 'ema_cross']:
+        # the open and close values can be the same for ema cross situations if the cross is triggered by a value that is less than a penny
+        if ema_x_strategy_table.loc[i, 'ema_cross'] and (ema_x_strategy_table.loc[i, 'open'] != ema_x_strategy_table.loc[i, 'close']):
             stop_loss = ema_x_strategy_table.loc[i, stop_loss_column_name]
 
             # Green candle (BUY)

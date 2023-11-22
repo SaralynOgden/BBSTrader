@@ -99,23 +99,6 @@ def main():
     # Shows all columns
     pandas.set_option('display.max_columns', None)
 
-    # # comments specific to a sell
-    # request = {
-    #     "symbol": 'BCHUSD',
-    #     "volume": 1.0,
-    #     "sl": 226.64, # should be largest
-    #     "tp": 226.13, # should be the smallest
-    #     "type_time": 0,
-    #     "comment": 'EMA cross strategy',
-    #     "type": mt5.ORDER_TYPE_SELL_STOP,
-    #     "action": mt5.TRADE_ACTION_PENDING,
-    #     "type_filling":mt5.ORDER_FILLING_RETURN,
-    #     "price": 226.16 # closing price of the last one
-    # }
-    # result = mt5.order_check(request)
-
-    # print(result)
-
     if connected:
         current_time = 0
         previous_time = 0
