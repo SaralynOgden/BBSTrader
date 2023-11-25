@@ -16,10 +16,10 @@ def make_trade(balance, comment, risk_pct, symbol, take_profit, stop_loss, stop_
     """
 
     # Get proper types and format
-    balance = (round(float(balance), 6))
-    take_profit = (round(float(take_profit), 6))
-    stop_loss = (round(float(stop_loss), 6))
-    stop_price = (round(float(stop_price), 6))
+    balance = (round(float(balance), 2))
+    take_profit = (round(float(take_profit), 2))
+    stop_loss = (round(float(stop_loss), 2))
+    stop_price = (round(float(stop_price), 2))
 
     # Get lot size
     lot_size = hf.calc_lot_size(balance, risk_pct, stop_loss, stop_price, symbol)

@@ -124,11 +124,11 @@ def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, sto
     # Ensure proper types and formatting
     volume = round(float(volume), 2)
 
-    stop_loss = round(float(stop_loss), 4)
+    stop_loss = round(float(stop_loss), 2)
     
-    take_profit = round(float(take_profit), 4)
+    take_profit = round(float(take_profit), 2)
 
-    stop_price = round(float(stop_price), 4)
+    stop_price = round(float(stop_price), 2)
 
     # Request dictionary
     request = {
@@ -143,20 +143,18 @@ def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, sto
     # Update request based on order type
     if order_type == "SELL_STOP":
         request['type'] = mt5.ORDER_TYPE_SELL_STOP
-        request['action'] = mt5.TRADE_ACTION_PENDING
-        request['type_filling'] = mt5.ORDER_FILLING_RETURN
-        
         request['price'] = stop_price if stop_price > 0 else ValueError("Stop price must be a non-zero positive value")
-
     elif order_type == "BUY_STOP":
         request['type'] = mt5.ORDER_TYPE_BUY_STOP
-        request['action'] = mt5.TRADE_ACTION_PENDING
-        request['type_filling'] = mt5.ORDER_FILLING_RETURN
-
-        request['price'] = stop_price if stop_price > 0 else ValueError("Stop price must be a non-zero positive value")
-
+        # padding to add an extra dollar for demo purposes
+        # without this dollar we often try to buy for less than the current sell price
+        request['price'] = stop_price + 5 if stop_price > 0 else ValueError("Stop price must be a non-zero positive value")
+        request['tp'] += 5
     else:
         raise ValueError(f"Unsupported order type given: {order_type}")
+
+    request['action'] = mt5.TRADE_ACTION_PENDING
+    request['type_filling'] = mt5.ORDER_FILLING_RETURN
 
     # No order checking
     if direct:
@@ -165,7 +163,7 @@ def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, sto
         if order_result[0] == 10009:
             return order_result[2]
         else:
-            raise Exception(f"Error. Order code: {order_result[0]}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
+            raise Exception(f"Error. Order code: {order_result.comment}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
     else:
         result = mt5.order_check(request)
 
@@ -173,7 +171,7 @@ def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, sto
         if result[0] == 0:
             return place_order(order_type, symbol, volume, stop_loss, take_profit, comment, stop_price, True)
         else:
-            raise Exception(f"Order Code: {result[0]}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
+            raise Exception(f"Order Code: {result.comment}. Code descriptions: https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes")
 
 def cancel_order(order_number):
     """
@@ -184,20 +182,20 @@ def cancel_order(order_number):
     # Create request
     request = {
         "action": mt5.TRADE_ACTION_REMOVE,
-        "order": order_number,
+        "order": order_number.ticket,
         "comment": "order removed"    
     }
     # Attempt to send the order to MT5
     try: 
         order_result = mt5.order_send(request)
         if order_result[0] == 10009:
-            print(f"Order {order_number} successfully cancelled")
+            print(f"Order {order_number.ticket} successfully cancelled")
             return True
         else:
-            print(f"Order {order_number} unable to be cancelled")
+            print(f"Order {order_number.ticket} unable to be cancelled")
             return False
     except Exception as e:
-        print(f"Error cancelling order {order_number}. Error {e}")
+        print(f"Error cancelling order {order_number.ticket}. Error {e}")
 
 def get_all_open_orders():
     """
