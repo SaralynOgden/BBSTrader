@@ -46,6 +46,6 @@ def calc_lot_size(balance, risk_pct, stop_loss, stop_price, symbol):
 
     if lot_size >= 10:
         lot_size = 9.99
-    elif lot_size < 1:
-        lot_size = 1
+    elif lot_size < 1.0:
+        lot_size = 1.0
     return lot_size

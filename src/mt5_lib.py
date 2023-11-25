@@ -148,8 +148,8 @@ def place_order(order_type, symbol, volume, stop_loss, take_profit, comment, sto
         request['type'] = mt5.ORDER_TYPE_BUY_STOP
         # padding to add an extra dollar for demo purposes
         # without this dollar we often try to buy for less than the current sell price
-        request['price'] = stop_price + 1 if stop_price > 0 else ValueError("Stop price must be a non-zero positive value")
-        request['tp'] += 1
+        request['price'] = stop_price + 5 if stop_price > 0 else ValueError("Stop price must be a non-zero positive value")
+        request['tp'] += 5
     else:
         raise ValueError(f"Unsupported order type given: {order_type}")
 
@@ -182,7 +182,7 @@ def cancel_order(order_number):
     # Create request
     request = {
         "action": mt5.TRADE_ACTION_REMOVE,
-        "order": order_number,
+        "order": order_number.ticket,
         "comment": "order removed"    
     }
     # Attempt to send the order to MT5
