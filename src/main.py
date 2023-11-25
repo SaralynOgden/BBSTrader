@@ -5,7 +5,6 @@ import pandas
 
 import mt5_lib as trader
 import ema_cross_strategy as strats
-import MetaTrader5 as mt5
 
 # Path to MetaTrader5 login details.
 ACCOUNT_SETTINGS_PATH = "./settings.json"
