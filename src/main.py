@@ -51,11 +51,11 @@ def run_strategy(json_settings):
     # Get a table of ema calculations for every initialized symbol
     for symbol in symbols_arr:
         # Trade type from the strategy
-        trade_result = strats.ema_cross_strategy(symbol, timeframe, 1, 2, 10000, 0.03)
+        order_number = strats.ema_cross_strategy(symbol, timeframe, 1, 2, 10000, 0.03)
 
         # Console output
-        if trade_result:
-            print(f"Trade made on {symbol}.")
+        if order_number:
+            print(f"Trade made on {symbol}. Order number: {order_number}")
         else:
             print(f"No trade for {symbol}.")
 
