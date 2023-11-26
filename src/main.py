@@ -41,13 +41,6 @@ def run_strategy(json_settings):
     # Get timeframe from settings.json
     timeframe=json_settings["mt5"]["timeframe"]
 
-    # Strategy Risk Management
-    # Get a list of open orders
-    orders = trader.get_all_open_orders()
-    # Iterate through the open orders and cancel
-    for order in orders:
-        trader.cancel_order(order)
-
     # Initialize all symbols
     for symbol in symbols_arr:
         try:
@@ -57,19 +50,11 @@ def run_strategy(json_settings):
     
     # Get a table of ema calculations for every initialized symbol
     for symbol in symbols_arr:
-
-        # Strategy Risk Management
-        # Generate the comment string
-        comment_string = f"EMA_Cross_strategy_{symbol}"
-
-        # Cancel orders related to the symbol and strategy
-        trader.cancel_filtered_orders(symbol, comment_string)
-
-        # Boolean from the strategy
-        ema_x_strategy_table = strats.ema_cross_strategy(symbol, timeframe, 1, 2, 10000, 0.03)
+        # Trade type from the strategy
+        trade_result = strats.ema_cross_strategy(symbol, timeframe, 1, 2, 10000, 0.03)
 
         # Console output
-        if (ema_x_strategy_table):
+        if trade_result:
             print(f"Trade made on {symbol}.")
         else:
             print(f"No trade for {symbol}.")
@@ -112,7 +97,7 @@ def main():
 
             if(current_time != previous_time):
                 # Discovered a new candle
-                print("New candlestick. Time to trade!")
+                # print("New candlestick. Time to trade!")
 
                 # Update previous time
                 previous_time = current_time
@@ -121,7 +106,7 @@ def main():
 
             else:
                 # No new candles
-                print("No new candles. Sleeping.")
+                # print("No new candles. Sleeping.")
                 time.sleep(1)
 
 if __name__ == '__main__':

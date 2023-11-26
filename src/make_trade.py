@@ -27,6 +27,12 @@ def make_trade(balance, comment, risk_pct, symbol, take_profit, stop_loss, stop_
     # Determine trade type
     (trade_type := "BUY_STOP") if stop_price > stop_loss else (trade_type := "SELL_STOP")
 
+    print(f"Trying to make {trade_type} trade on {symbol} with the following conditions:")
+    print(f"balance: {balance}")
+    print(f"take profit: {take_profit}")
+    print(f"stop loss: {stop_loss}")
+    print(f"stop price: {stop_price}")
+
     # Send trade
     trade_outcome = trader.place_order(trade_type, symbol, lot_size, stop_loss, take_profit, comment, stop_price, False)
 
