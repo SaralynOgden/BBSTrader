@@ -27,3 +27,15 @@ The following **settings.json** fields must be set for BBSTrader to work:
 The remaining fields may be updated to your liking:
 * _symbols_--An array of valid MetaTrader5 trading symbols
 * _timeout_--The number of milliseconds allocated to attempt connection establishment before timing out.
+
+### Testing
+Tests are located in the tests subdirectory. To run all of the tests in the terminal, run
+```python -m pytest tests```
+from the main directory. To run any individual test, run
+```python -m pytest tests\<your test file>```
+
+Test coverage can and should be monitored. This can be done using the command
+```python -m pytest tests --cov=.```
+To view what lines are and are not covered, run
+```python3 -m coverage html```
+and view the results in your web broswer.

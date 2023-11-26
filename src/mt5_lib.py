@@ -182,20 +182,20 @@ def cancel_order(order_number):
     # Create request
     request = {
         "action": mt5.TRADE_ACTION_REMOVE,
-        "order": order_number.ticket,
+        "order": order_number,
         "comment": "order removed"    
     }
     # Attempt to send the order to MT5
     try: 
         order_result = mt5.order_send(request)
         if order_result[0] == 10009:
-            print(f"Order {order_number.ticket} successfully cancelled")
+            print(f"Order {order_number} successfully cancelled")
             return True
         else:
-            print(f"Order {order_number.ticket} unable to be cancelled")
+            print(f"Order {order_number} unable to be cancelled. {order_result.comment}")
             return False
     except Exception as e:
-        print(f"Error cancelling order {order_number.ticket}. Error {e}")
+        print(f"Error cancelling order {order_number}. Error {e}")
 
 def get_all_open_orders():
     """
@@ -212,7 +212,7 @@ def get_filtered_list_of_orders(symbol, comment):
     :return: (filtered) list of orders
     """
     # Retrieve a list of open orders, filtered by symbol
-    open_orders_by_symbol = mt5.orders_get(symbol)
+    open_orders_by_symbol = mt5.orders_get(symbol=symbol)
     # Check if any order were retreived
     if open_orders_by_symbol is None or len(open_orders_by_symbol) == 0:
         return []
@@ -226,7 +226,7 @@ def get_filtered_list_of_orders(symbol, comment):
     # From the open orders dataframe, fitler orders by comment
     open_orders_dataframe = open_orders_dataframe[open_orders_dataframe['comment'] == comment]
     # Create a list to store the open order numbers
-    open_orders = {}
+    open_orders = []
     # Iterate through the dataframe and add order numbers to the list
     for order in open_orders_dataframe['ticket']:
         open_orders.append(order)
