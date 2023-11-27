@@ -33,6 +33,7 @@ Tests are located in the tests subdirectory. To run all of the tests in the term
 ```python -m pytest tests```
 from the main directory. To run any individual test, run
 ```python -m pytest tests\<your test file>```
+for more information, visit https://coverage.readthedocs.io/en/latest/cmd.html
 
 Test coverage can and should be monitored. This can be done using the command
 ```python -m pytest tests --cov=.```

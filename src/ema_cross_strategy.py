@@ -25,7 +25,7 @@ def ema_cross_strategy(symbol, timeframe, short_term_ema_length, long_term_ema_l
 
     # it is possible to have a cross that leads to a difference less than a penny
     # if this is so, then the rounded stop loss and stop price will be the same and we should not trade
-    if trade_event['ema_cross'].values and (float(trade_event.iloc[0]['stop_loss']) != float(trade_event.iloc[0]['stop_price'])):
+    if trade_event['ema_cross'].values and (float(trade_event.iloc[0]['open']) != float(trade_event.iloc[0]['close'])):
         comment = f"EMA_Cross_strate"
         # Cancel open orders
         mt5_lib.cancel_filtered_orders(symbol, comment)
