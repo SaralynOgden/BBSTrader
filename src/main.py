@@ -66,10 +66,6 @@ def main():
     Business logic entry point.
     """
 
-    # Prevents imported invocations of main().
-    if __name__ != "__main__":
-        raise RuntimeError(f"main() should only be invoked in: {__file__}")
-
     # Deserialize MetaTrader settings
     json_settings = get_json_from_file(ACCOUNT_SETTINGS_PATH)
 
@@ -102,7 +98,7 @@ def main():
                 # Update previous time
                 previous_time = current_time
 
-                strategy = run_strategy(json_settings)
+                run_strategy(json_settings)
 
             else:
                 # No new candles
